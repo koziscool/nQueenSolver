@@ -1,0 +1,17 @@
+.board-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+
+.card {
+  height: 50px;
+  display: inline-block;
+  background-color: lightgrey;
+  text-align: center;
+  font-weight: bold;
+  margin: 0%;
+  padding: 0;
+  border: 1px solid black;
+  box-sizing: border-box;
+}
