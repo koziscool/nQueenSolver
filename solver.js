@@ -25,26 +25,14 @@ var solverModel = {
 };
 
 
-var appController = {
+var boardView = {
 
   model: solverModel,
-  view: boardView,
-
-  init: function(size) {
-    this.model.init(size);
-    this.view.init();
-  },
-
-};
-
-
-
-var boardView = {
 
   init: function() {
     this.$grid = $('#board-grid');
     this.render();
-  }
+  },
 
   render: function() {
     this.addSquaresToGrid();
@@ -52,7 +40,7 @@ var boardView = {
     $('.square').css({
       width: width + "%"
     });
-  }
+  },
 
   addSquaresToGrid: function() {
     for( var i = 0; i < this.model.squares.length; i++ ) {
@@ -66,6 +54,21 @@ var boardView = {
   },
 
 };
+
+var appController = {
+
+  model: solverModel,
+  view: boardView,
+
+  init: function(size) {
+    console.log('here');
+    this.model.init(size);
+    this.view.init();
+    console.log('there');
+  },
+
+};
+
 
 $(document).ready(function() {
 
