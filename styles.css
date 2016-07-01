@@ -4,14 +4,44 @@
 }
 
 
+.row-container {
+
+}
+
+
 .square {
-  height: 50px;
+  width: 40px;
+  height: 40px;
   display: inline-block;
-  background-color: lightgrey;
   text-align: center;
   font-weight: bold;
+  border: 1px solid black;
   margin: 0%;
   padding: 0;
-  border: 1px solid black;
+
   box-sizing: border-box;
+}
+
+.light-square {
+  background-color: white;
+}
+
+.dark-square {
+  background-color: darkgrey;
+}
+
+.table{
+    display:table;
+    height:100%;
+    width:100%;
+}
+.table-cell{
+    display:table-cell;
+    vertical-align:middle;
+    height:100%;
+    width:100%;
+}
+
+.square-content {
+
 }

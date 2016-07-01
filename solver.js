@@ -21,13 +21,13 @@ var solverModel = {
     this.id = id;
     this.value = value;
   },
-
 };
 
 
 var boardView = {
 
   model: solverModel,
+  sideLength:25,
 
   init: function() {
     this.$grid = $('#board-grid');
@@ -36,23 +36,37 @@ var boardView = {
 
   render: function() {
     this.addSquaresToGrid();
-    var width = 100.0 / this.model.size - 2;
-    $('.square').css({
-      width: width + "%"
-    });
+    // var side = 100.0 / this.model.size;
+    // $('.square').css({
+    //   width: side + "%"
+    // });
   },
 
+
+  // change this to size
   addSquaresToGrid: function() {
-    for( var i = 0; i < this.model.squares.length; i++ ) {
-      var square = this.model.squares[i];
-      var $squareDiv = $("<div> <div class='name'>" + square.value+ "</div></div>");
-      $squareDiv.addClass('square');
-      $squareDiv.data( 'square-id', square.id );
-      $squareDiv.attr( 'id', 'square-' + square.id );
-      this.$grid.append($squareDiv);
+    for( var row = 0; row < this.model.size; row++ ) {
+      var $rowDiv = $("<div class='row-container'></div>");
+      for( var col = 0; col < this.model.size; col++ ) {
+        var squareIndex = row * this.model.size + col
+        var square = this.model.squares[squareIndex];
+
+        // var $squareDiv = $("<div> <div class='name'>" + square.value+ "</div></div>");
+        var $squareDiv = $("<div> <div class='table'><div class='table-cell'><img src='Chess_queen_icon.png'/></div></div></div>");
+        $squareDiv.addClass('square');
+        if( (row + col) % 2 === 0 ) {
+          $squareDiv.addClass('dark-square');
+        } else {
+          $squareDiv.addClass('light-square');          
+        }
+
+        $squareDiv.data( 'square-id', square.id );
+        $squareDiv.attr( 'id', 'square-' + square.id );
+        $rowDiv.append($squareDiv);
+      }
+      this.$grid.append($rowDiv);
     }
   },
-
 };
 
 var appController = {
