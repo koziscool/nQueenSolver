@@ -45,3 +45,7 @@
 .square-content {
 
 }
+
+.has-queen {
+  content:url('Chess_queen_icon.png');
+}

@@ -154,7 +154,9 @@ var boardView = {
       }
       this.$grid.append($rowDiv);
     }
-  },
+  }
+
+
 };
 
 var appController = {
@@ -167,6 +169,7 @@ var appController = {
     this.model.init(size);
     this.view.init();
     this.model.solve();
+
     console.log("there");
     // console.log(solverModel.squares);
   },

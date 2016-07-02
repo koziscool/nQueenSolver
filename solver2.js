@@ -44,6 +44,7 @@ var solverModel = {
       console.log( "after", newQueen, partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath );
 
       if ( partialSoln.length === this.size ) {
+        this.solution = partialSoln;
         console.log( "solved", partialSoln );     
       }
     }
@@ -117,7 +118,7 @@ var boardView = {
         var squareIndex = row * this.model.size + col
         var square = this.model.squares[squareIndex];
 
-        var $squareDiv = $("<div> <div class='table'><div class='table-cell'><img src='Chess_queen_icon.png'/></div></div></div>");
+        var $squareDiv = $("<div> <div class='table'><div class='table-cell'></div></div></div>");
         $squareDiv.addClass('square');
         if( (row + col) % 2 === 0 ) {
           $squareDiv.addClass('dark-square');
@@ -125,13 +126,27 @@ var boardView = {
           $squareDiv.addClass('light-square');          
         }
 
-        $squareDiv.data( 'square-id', square.id );
-        $squareDiv.attr( 'id', 'square-' + square.id );
+        $squareDiv.data( 'square-id', squareIndex );
+        $squareDiv.attr( 'id', 'square-' + squareIndex );
         $rowDiv.append($squareDiv);
       }
       this.$grid.append($rowDiv);
     }
   },
+
+  showSolutionView: function() {
+
+    console.log( "showing solution");
+    for (var i = 0; i < this.model.squares.length; i++ ) {
+      if( this.model.solution.indexOf(i) > -1 ) {
+        console.log( "has queen");
+
+        var idString = '#square-' + i.toString();
+        $squareDiv =  $(idString);
+        $squareDiv.addClass('has-queen');
+      }
+    }
+  }
 };
 
 var appController = {
@@ -144,6 +159,7 @@ var appController = {
     this.model.init(size);
     this.view.init();
     this.model.solve();
+    this.view.showSolutionView();
     console.log("there");
     // console.log(solverModel.squares);
   },
