@@ -3,6 +3,9 @@
 var solverModel = {
   size: 8,
   squares: [],
+  remainingAvailable: [],
+  solution: [],
+  solutions: [],
 
   init: function(size) {
     this.size = size;
@@ -13,9 +16,8 @@ var solverModel = {
   },
 
   addSquare: function(i) {
-    // var newSquare = new this.Square(i, "X", this.size);
-    // this.squares.push( newSquare );
     this.squares.push( i );
+    this.remainingAvailable.push( i );
   },
 
   rowNumber: function(i) {
@@ -26,63 +28,52 @@ var solverModel = {
     return  i % this.size;
   },
 
+  // initRemainingAvailable: function() {
+  //   for ( var i = 0; i < this.squares.length; i++ )
+  //     this.remainingAvailable[i] = true;
+  // },
+
   solve: function( ) {
     var partialSoln = [];
-    var partialSolnPath = [[]];
-    var remainingAvailable = this.squares.slice();
-    var remainingAvailablePath = [ this.squares.slice() ];
-    var newQueen;
+    var currentRowNum = 0;
 
-    while (partialSoln.length < this.size && remainingAvailable.length > 0) {
-      newQueen = remainingAvailable[0];
-      console.log( "before", newQueen, partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath );
-      var retArr  = this.iterateSolver( newQueen, partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath );
-      partialSoln = retArr[0];
-      partialSolnPath = retArr[1];
-      remainingAvailable = retArr[2];
-      remainingAvailablePath = retArr[3];
-      console.log( "after", newQueen, partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath );
-
-      if ( partialSoln.length === this.size ) {
-        this.solution = partialSoln;
-        console.log( "solved", partialSoln );     
-      }
-    }
-  },
-
-  iterateSolver: function( newQueen, partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath ) {
-    // console.log(remainingAvailable);
-    var newAvailable = this.removeNeighbors( newQueen, remainingAvailable );
-
-    if ( newAvailable.length >= this.size - partialSoln.length - 1 ) {
-      partialSoln.push( newQueen );
-      // console.log( partialSoln );
-      partialSolnPath.push( partialSoln.slice() );
-      remainingAvailable = newAvailable.slice();
-      remainingAvailablePath.push( remainingAvailable );
+    console.log( "-----" );
+    if( this.iterateSolver( this.remainingAvailable.slice(), partialSoln, currentRowNum ) ) {
+      this.solution = this.solutions[0];
+      console.log( "solved", this.solutions );           
     } else {
-      remainingAvailable.shift();
-      if( remainingAvailable.length === 0 ) {
-        remainingAvailablePath.pop();
-        console.log( remainingAvailablePath );
-
-        remainingAvailable = remainingAvailablePath[remainingAvailablePath.length - 1];
-        remainingAvailable.shift();
-        console.log( remainingAvailable );
-
-        partialSolnPath.pop();
-        console.log( partialSolnPath );
-
-        partialSoln = partialSolnPath[partialSolnPath.length - 1];
-        console.log( partialSoln );
-      }
+      console.log("no solutions")
     }
 
-    return [ partialSoln, partialSolnPath, remainingAvailable, remainingAvailablePath ];
   },
 
+  iterateSolver: function( available, partialSoln, currentRowNum ) {
+    console.log( "---------------" );
+    console.log( "available", available );
+    console.log( "partial", partialSoln );
 
+    if( partialSoln.length === this.size ) {
+      this.solutions.push( partialSoln );
+      return true;
+    }
 
+    if( available.length <= 0 ) {
+      return false;
+    }
+
+    var newQueen;
+    while( available[0] < (currentRowNum + 1) * this.size ) {
+      newQueen = available[0];
+      console.log( "newQueen", newQueen );
+      var newAvailable = this.removeNeighbors( newQueen, available);
+      var newPartial = partialSoln.slice()
+      newPartial.push( newQueen );
+      console.log( "newPartial", newPartial );
+      this.iterateSolver( newAvailable, newPartial, currentRowNum + 1 )
+      available.shift();
+    }
+    return false;
+  },
 
   removeNeighbors: function( newQueen, remainingAvailable ){
     var modelContext = this;
@@ -135,12 +126,8 @@ var boardView = {
   },
 
   showSolutionView: function() {
-
-    console.log( "showing solution");
     for (var i = 0; i < this.model.squares.length; i++ ) {
       if( this.model.solution.indexOf(i) > -1 ) {
-        console.log( "has queen");
-
         var idString = '#square-' + i.toString();
         $squareDiv =  $(idString);
         $squareDiv.addClass('has-queen');
@@ -166,5 +153,5 @@ var appController = {
 };
 
 $(document).ready(function() {
-  appController.init(8);
+  appController.init( 4 );
 });
