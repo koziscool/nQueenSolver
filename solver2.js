@@ -28,31 +28,29 @@ var solverModel = {
     return  i % this.size;
   },
 
-  // initRemainingAvailable: function() {
-  //   for ( var i = 0; i < this.squares.length; i++ )
-  //     this.remainingAvailable[i] = true;
-  // },
-
   solve: function( ) {
     var partialSoln = [];
     var currentRowNum = 0;
 
-    console.log( "-----" );
-    if( this.iterateSolver( this.remainingAvailable.slice(), partialSoln, currentRowNum ) ) {
+    this.iterateSolver( this.remainingAvailable.slice(), partialSoln, currentRowNum )
+    if( this.solutions.length > 0 ) {
+      console.log( "-----" );
       this.solution = this.solutions[0];
       console.log( "solved", this.solutions );           
     } else {
+      console.log( "-----" );
       console.log("no solutions")
     }
-
   },
 
   iterateSolver: function( available, partialSoln, currentRowNum ) {
     console.log( "---------------" );
     console.log( "available", available );
     console.log( "partial", partialSoln );
+    console.log( "currentRowNum", currentRowNum );
 
     if( partialSoln.length === this.size ) {
+      console.log( "add soln")
       this.solutions.push( partialSoln );
       return true;
     }
@@ -62,6 +60,8 @@ var solverModel = {
     }
 
     var newQueen;
+    // console.log( "available0", available[0] );
+    // console.log( "size", this.size );
     while( available[0] < (currentRowNum + 1) * this.size ) {
       newQueen = available[0];
       console.log( "newQueen", newQueen );
@@ -70,8 +70,10 @@ var solverModel = {
       newPartial.push( newQueen );
       console.log( "newPartial", newPartial );
       this.iterateSolver( newAvailable, newPartial, currentRowNum + 1 )
+      console.log("----") 
       available.shift();
     }
+    console.log( "outside while")
     return false;
   },
 
